@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	
+	<resultMap id="boardMap" type="HashMap">
+		<result column="no" property="no" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="name" property="name" />
+		<result column="hit" property="hit" />
+		<result column="reg_date" property="regDate" />
+		<result column="user_no" property="userNo" />
+	</resultMap>
+	
+	<resultMap id="BoardVo" type="com.javaex.vo.BoardVo">
+		<result column="no" property="no" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="hit" property="hit" />
+		<result column="reg_date" property="regDate" />
+		<result column="user_no" property="userNo" />
+	</resultMap>
+
+
+	<select id="boardList" resultMap="boardMap">
+		<![CDATA[
+			select	b.no,
+					title,
+					name,
+					hit,
+					to_char(reg_date,'YY-MM-DD') reg_date,
+					user_no
+			from board b, users u
+			where b.user_no = u.no
+			and title like #{keyword}
+			order by b.no desc
+		]]>
+	</select>
+
+	<select id="getBoard" parameterType="int" resultMap="boardMap">
+		<![CDATA[
+			select	b.no,
+					title,
+					content,
+					name,
+					hit,
+					to_char(reg_date,'YY-MM-DD') reg_date,
+					user_no
+			from board b, users u
+			where b.user_no = u.no
+			and b.no = #{no}
+		]]>
+	</select>
+	
+	<insert id="hitUp" parameterType="int">
+		<![CDATA[
+			update board
+			set hit = hit + 1 
+			where no = #{no}
+		]]>
+	</insert>
+	
+	<delete id="boardDelete" parameterType="com.javaex.vo.BoardVo">
+		<![CDATA[ 
+			delete from board
+			where no = #{no}
+			and user_no = #{userNo}
+		]]>
+	</delete>
+	
+	<insert id="boardWrite" parameterType="com.javaex.vo.BoardVo">
+		<![CDATA[ 
+			insert into board
+			values (seq_board_no.nextval,
+					#{title},
+					#{content},
+					0,
+					sysdate,
+					#{userNo})
+		]]>
+	</insert>
+	
+	<update id="boardModify" parameterType="com.javaex.vo.BoardVo">
+		<![CDATA[ 
+			update board
+			set title = #{title},
+				content = #{content}
+			where no = #{no}
+		 ]]>
+	</update>
+
+</mapper>
