@@ -49,19 +49,25 @@
 	padding: 10px 10px 10px 10px ;
 }
 
+#guestbook .guestRead button {
+    width: 70px;
+    padding: 5px;
+    cursor: pointer;
+}
+
 
 /****************************************************************/
 /* 방명록 삭제폼 상단(방명록 정보)***************************************/
 /****************************************************************/
 #guestbook #guestInfo td,
 #guestbook #guestInfo th {
-	padding: 10px 5px 10px 5px;
+	padding: 10px;
 }
 
 #guestbook #guestInfo {margin: 0px 0px 30px 0px;}
 
 #guestbook #guestInfo .guestDeleteContent{
-	height: 150px;
+	height: 100px;
 	padding: 10px;
 }
 

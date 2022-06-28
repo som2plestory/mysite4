@@ -13,11 +13,11 @@
 		<ul>
 			<c:choose>
 				<c:when test="${empty authUser}">
-					<li><a href="./loginForm">로그인</a></li>
-					<li><a href="./joinForm">회원가입</a></li>
+					<li><a href="${pageContext.request.contextPath}/user/loginForm">로그인</a></li>
+					<li><a href="${pageContext.request.contextPath}/user/joinForm">회원가입</a></li>
 				</c:when>
 				<c:otherwise>
-					<li><a href="./modifyForm">회원정보수정</a></li>	
+					<li><a href="${pageContext.request.contextPath}/user/modifyForm">회원정보수정</a></li>	
 				</c:otherwise>
 			</c:choose>
 		</ul>

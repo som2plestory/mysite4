@@ -22,6 +22,13 @@ public class GuestbookDao {
 		
 		return guestList;
 	}
+	
+	// 방명록 저장(ajax)
+	public void insertGuest(GuestbookVo guestbookVo) {
+		System.out.println("GuestbookDao > insertGuest()");
+		
+		sqlSession.insert("guestbook.insertSelectKey", guestbookVo);
+	}
 
 	// 방명록 등록
 	public void guestbookInsert(GuestbookVo guestbookVo) {
