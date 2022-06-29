@@ -50,6 +50,7 @@ public class GuestbookService {
 		guestbookDao.guestbookInsert(guestbookVo);
 	}
 
+	
 	// 방명록 1개 정보(삭제 정보)
 	public GuestbookVo getGuest(int no) {
 		System.out.println("GuestbookService > getGuest()");
@@ -58,7 +59,9 @@ public class GuestbookService {
 		
 		return guestbookVo;
 	}
-
+	
+	
+	// mysite5 확인
 	// 방명록 1개 정보(비밀번호 확인)
 	public GuestbookVo checkGuest(GuestbookVo guestbookVo) {
 		System.out.println("GuestbookService > checkGuest()");
@@ -68,11 +71,21 @@ public class GuestbookService {
 		return guestVo;
 	}
 
+	
 	// 방명록 삭제
-	public void guestbookDelete(GuestbookVo guestVo) {
+	public String guestbookDelete(GuestbookVo guestVo) {
 		System.out.println("GuestbookService > guestbookDelete()");
+		String state;
 		
-		guestbookDao.guestbookDelete(guestVo);
+		int count = guestbookDao.guestbookDelete(guestVo);
+		
+		if(count == 1) {
+			state = "success";
+		}else {
+			state = "fail";
+		}
+		
+		return state;
 	}
 
 }

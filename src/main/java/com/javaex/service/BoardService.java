@@ -16,7 +16,7 @@ public class BoardService {
 	private BoardDao boardDao;
 	
 	
-	// // 게시판 리스트(+ 제목 검색)
+	// 게시판 리스트(+ 제목 검색)
 	public List<HashMap<String, Object>> boardList(String keyword){
 		System.out.println("BoardService > BoardList()");
 		

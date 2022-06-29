@@ -4,11 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.javaex.service.GuestbookService;
@@ -56,6 +54,19 @@ public class ApiGuestbookController {
 	}
 	
 	
+	//방명록 삭제(ajax)
+	@ResponseBody
+	@RequestMapping(value="/api/guestbook/remove", method = {RequestMethod.GET, RequestMethod.POST})
+	public String remove(@ModelAttribute GuestbookVo guestbookVo) {
+		System.out.println("ApiGuestbookController > remove()");
+		
+		String result = guestbookService.guestbookDelete(guestbookVo);
+		
+		return result;
+	}
+	
+	
+	/*
 	//방명록 삭제폼(ajax)
 	//no을 model없이 어떻게 삭제 정보로 가게끔 해야할지 모르겠어 
 	@RequestMapping(value="/api/guestbook/deleteForm", method = {RequestMethod.GET, RequestMethod.POST})
@@ -78,4 +89,5 @@ public class ApiGuestbookController {
 		
 		return guestbookVo;
 	}
+	*/
 }
