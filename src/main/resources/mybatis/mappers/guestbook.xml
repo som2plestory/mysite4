@@ -31,17 +31,18 @@
 		</selectKey>
 
 		insert into guestbook
-					values (#{no}, 
-					#{name}, 
-					#{password}, 
-					#{content}, 
-					sysdate)
+		values (#{no}, 
+				#{name}, 
+				#{password}, 
+				#{content}, 
+				sysdate)
 
 	</insert>
 	
 	
 	<!-- 방명록 저장 -->
 	<insert id="guestbookInsert" parameterType="com.javaex.vo.GuestbookVo" >
+		insert into guestbook
 		values (seq_guestbook_no.nextval, 
 				#{name}, 
 				#{password}, 

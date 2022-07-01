@@ -165,34 +165,75 @@ $("#btnSubmit").on("click", function(){
 	//ajax!!!
 	$.ajax({
 		
-		/* 길어질수록 불편하니 미리 객체로 묶어오기 */
-		/* url : "${pageContext.request.contextPath }/api/guestbook/add?name="+name+"&password="+password+"&content="+content,*/
-		url : "${pageContext.request.contextPath }/api/guestbook/add",
+		url : "${pageContext.request.contextPath }/api/guestbook/add2",
 		type : "post",
-		//contentType : "application/json",
+		contentType : "application/json",
 		
-		//파라미터 정리
-		data : guestVo,
+		//js객체를 JSON문자열로 변경
+		data : JSON.stringify(guestVo),
 		
 		dataType : "json",
+		
 		success : function(gVo){
-			
 			/* 1개데이터 리스트 추가(그리기:render)하기 */
-			render(gVo, "up");
+			 render(gVo, "up")
 			
 			/* 입력폼 초기화 */
-			$("[name = 'name']").val("");
-			$("[name = 'password']").val("");
-			$("[name = 'content']").val("");
+			$("[name = 'name']").val("")
+			$("[name = 'password']").val("")
+			$("[name = 'content']").val("") 
+		
+		},
+		error : function(XHR, status, error) {
+			console.error(status + " : " + error);
+			
+		} 
+	})
+})
+ 
+ 
+/*
+//jquery 요청(파라미터)
+$("#btnSubmit").on("click", function(){
+	console.log("저장버튼 클릭");
+	
+	//데이터수집
+	var name = $("[name='name']").val();
+	var password = $("[name='password']").val();
+	var content = $("[name=content]").val();
+	
+	//데이터 객체로 묶기
+	var guestVo = {
+		name: name,
+		password: password,
+		content: content
+	};
+	
+	$.ajax({
+		
+		//url : "${pageContext.request.contextPath }/api/guestbook/add?name="+name+"&password="+password+"&content="+content
+		url : "${pageContext.request.contextPath }/api/guestbook/add",		
+		type : "post",
+		//contentType : "application/json",
+		data : guestVo,   //파라미터 정리된다
+		dataType : "json",
+		success : function(gVo){
+			//1개데이터 리스트 추가(그리기)하기
+			render(gVo, "up");
+			
+			//입력폼 초기화
+			$("[name='name']").val("");
+			$("[name='password']").val("");
+			$("[name='content']").val("");
 			
 		},
 		error : function(XHR, status, error) {
 			console.error(status + " : " + error);
 		}
-			
-	})
-})
- 
+	});
+});
+*/
+*
 
 
 /* 삭제 버튼을 눌렀을 때 */
