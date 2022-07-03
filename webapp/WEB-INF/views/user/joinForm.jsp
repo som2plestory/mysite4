@@ -6,9 +6,18 @@
 <head>
 <meta charset="UTF-8">
 <title>MYSITE: 회원가입</title>
+
+<!-- css -->
+<link href="${pageContext.request.contextPath}/assets/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/assets/css/mysite.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/assets/css/user.css" rel="stylesheet" type="text/css">
 
+<!-- js -->
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.12.4.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/assets/bootstrap/js/bootstrap.js"></script>
+	
 </head>
 
 <body>
@@ -39,10 +48,12 @@
 	
 				<div id="user">
 					<div id="joinForm">
-						<form action="${pageContext.request.contextPath}/user/join" method="post">
+						<form id="join-form" action="${pageContext.request.contextPath}/user/join" method="post">
 							
 							<div class="form-group">
 								<span class="form-text"></span> 
+								<span style="color:#0000FF;">*표시된 부분은 필수입니다.</span>
+								<%-- 								
 								<c:choose>
 									<c:when test="${userVo.password == '' || userVo.name == ''}">
 										<span style="color:#FF0000;">회원가입 실패: *표시된 부분은 필수입니다.</span>
@@ -51,22 +62,20 @@
 										<span style="color:#0000FF;">*표시된 부분은 필수입니다.</span>
 									</c:otherwise>
 								</c:choose>
+								 --%>
 							</div>
 							
 							<!-- 아이디 -->
 							<div class="form-group">
 								<label class="form-text" for="input-uid">*아이디</label> 
-								<input type="text" id="input-uid" name="id" 
+								<input type="text" id="input-uid" name="id" placeholder="아이디를 입력하세요.">
+									<!-- 
 									<c:if test="${userVo.id != ''}">
 										value="${userVo.id}"
 									</c:if>
-									placeholder="아이디를 입력하세요.">
-								<button type="button" id="id-check">중복체크</button>
+									 -->
+								<button type="button" id="btn-idCheck">중복체크</button>
 								
-								<!-- 아이디 중복 -->
-								<c:if test="${idCheck == 'Fail' && userVo.id != ''}">
-									<span style="color:#FF0000;">이미 존재하는 아이디입니다.</span>
-								</c:if>
 							</div>
 
 							<!-- 비밀번호 -->
@@ -78,9 +87,8 @@
 							<!-- 이름 -->
 							<div class="form-group">
 								<label class="form-text" for="input-name">*이름</label> 
-								<input type="text" id="input-name" name="name" 
-									<c:if test="${userVo.name != ''}">value="${userVo.name}"</c:if>
-								 placeholder="이름을 입력하세요">
+								<input type="text" id="input-name" name="name" value="" placeholder="이름을 입력하세요">
+									<%-- <c:if test="${userVo.name != ''}">value="${userVo.name}"</c:if> --%>
 							</div>
 	
 							<!-- 성별 -->
@@ -97,10 +105,10 @@
 	
 							<!-- 약관동의 -->
 							<div class="form-group">
-								<span class="form-text">약관동의</span> 
+								<span class="form-text">*약관동의</span> 
 								<input type="checkbox" id="chk-agree" name="agree" value="true">
 								<label for="chk-agree">서비스 약관에 동의합니다.</label> 
-								<span style="color:#FF0000;">약관에 동의하지 않으면 가입이 불가합니다.</span>
+								<!-- <span style="color:#FF0000;">약관에 동의하지 않으면 가입이 불가합니다.</span> -->
 							</div>
 							
 							<!-- 버튼영역 -->
@@ -126,5 +134,83 @@
 	<!-- //wrap -->
 
 </body>
+
+<script type="text/javascript">
+
+/* 아이디 중복 확인 */
+$("#btn-idCheck").on("click", function(){
+	console.log("아이디 중복 확인 버튼 클릭")
+	
+	//데이터
+	var id = $("[name = 'id']").val()
+	
+	//ajax
+	$.ajax({
+		
+		url : "${pageContext.request.contextPath }/user/idCheck",
+		type : "post",
+		contentType : "application/json",
+		data : JSON.stringify(id),
+		dataType : "json",
+		success : function(result){
+			console.log(reslut)
+			
+			if(result == "success"){
+				alert("사용 가능한 아이디입니다.")
+				//$("#idCheck").html("사용 가능한 아이디입니다.")
+				//$("#idCheck").css("color", "blue")
+			
+			}else{
+				alert("사용 불가능한 아이디입니다.")
+				//$("#idCheck").html("사용 불가능한 아이디입니다.")
+				//$("#idCheck").css("color", "red")
+			}
+			
+		},
+		error : function(XHR, status, error) {
+			console.error(status + " : " + error);
+			
+		} 
+	})
+})
+
+
+
+$("#join-form").on("submit", function(){
+	console.log("회원가입 버튼 클릭")
+	
+	var id = $("#input-uid").val()
+	var password = $("#input-pass").val()
+	var name = $("#input-name").val()
+	
+	if(id == "" || id == null){
+		alert("아이디를 입력해주세요")
+		return false
+	}
+	
+	if(password == "" || password == null){
+		alert("비밀번호를 입력해주세요")
+		return false
+	}else if(password.length < 8){
+		alert("비밀번호는 8자리 이상만 가능합니다")
+		return false
+	}
+	
+	if(name == "" || name == null){
+		alert("이름을 입력해주세요")
+		return false
+	}
+	
+	//약관동의
+	var agree = $("#chk-agree").is(":checked")
+	if(agree == false){
+		alert("약관에 동의하지 않으면 회원가입이 불가능합니다")
+		return false
+	}
+	
+	return true
+})
+
+</script>
 
 </html>

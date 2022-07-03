@@ -75,6 +75,7 @@ public class GuestbookService {
 	// 방명록 삭제
 	public String guestbookDelete(GuestbookVo guestVo) {
 		System.out.println("GuestbookService > guestbookDelete()");
+		
 		String state;
 		
 		int count = guestbookDao.guestbookDelete(guestVo);

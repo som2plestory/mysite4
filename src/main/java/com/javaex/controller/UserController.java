@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -29,8 +30,23 @@ public class UserController {
 	
 	
 	// 아이디 중복 확인
-	//@RequestMapping(value = "/user/idCheck")
-	
+	@RequestMapping(value = "/user/idCheck", method = { RequestMethod.GET, RequestMethod.POST})
+	public String idCheck(@RequestBody String id) {
+		System.out.println("UserContoller > idCheck()");
+		
+		String result;
+		boolean check = userService.idCheck(id);
+
+		if(check == true) {
+			result = "success";
+			
+		//check == false
+		}else {
+			result = "fail";
+		}
+		
+		return result;
+	}
 	
 	// 회원 가입
 	@RequestMapping(value = "/user/join", method = { RequestMethod.GET, RequestMethod.POST})
