@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="replyboard">
+
+	<resultMap id="ReplyboardVo" type="com.javaex.vo.ReplyboardVo">
+		<result column="no" property="no" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="hit" property="hit" />
+		<result column="reg_date" property="regDate" />
+		<result column="user_no" property="userNo" />
+		<result column="group_no" property="groupNo" />
+		<result column="order_no" property="orderNo" />
+		<result column="depth" property="depth" />
+		<result column="name" property="name" />
+	</resultMap>
+
+
+	<!-- /****************************** 게시판 리스트(+ 제목 검색) ********************************/ -->
+	<select id="boardList" parameterType="String" resultMap="ReplyboardVo">
+		SELECT	b.no,
+				title,
+				name,
+				hit,
+				to_char(reg_date,'YY-MM-DD') reg_date,
+				user_no
+		FROM board b, users u
+		WHERE b.user_no = u.no
+		AND title LIKE '%'||#{keyword}||'%'
+		ORDER BY b.no DESC
+	</select>
+
+	
+	<!-- /********************************** 게시글 읽기(1개) ***********************************/ -->
+	<select id="getBoard" parameterType="int" resultMap="ReplyboardVo">
+		SELECT  b.no,
+				title,
+				content,
+				name,
+				hit,
+				TO_CHAR(reg_date,'YY-MM-DD') reg_date,
+				user_no
+		FROM board b, users u
+		WHERE b.user_no = u.no
+		AND b.no = #{no}
+	</select>
+	
+	
+	<!-- /*********************** 다른 사람의 글을 읽을 때: 조회수 1 상승 ***************************/ -->
+ 	<insert id="hitUp" parameterType="int">
+		UPDATE board
+		SET hit = hit + 1 
+		WHERE no = #{no}
+	</insert>
+
+
+	<!-- /************************************ 게시글 삭제 ************************************/ -->
+	<delete id="delete" parameterType="com.javaex.vo.ReplyboardVo">
+		DELETE from board
+		WHERE no = #{no}
+		AND user_no = #{userNo}
+	</delete>
+	
+	
+	<!-- /************************************ 게시글 작성 ************************************/ -->
+	<insert id="write" parameterType="com.javaex.vo.ReplyboardVo">
+			INSERT into board
+			VALUES (seq_board_no.nextval,
+					#{title},
+					#{content},
+					0,
+					sysdate,
+					#{userNo})
+	</insert>
+	
+	<!-- /*********************************** 게시글 수정폼 ***********************************/ -->
+	<select id="modifyForm" parameterType="com.javaex.vo.ReplyboardVo" resultMap="ReplyboardVo">
+		SELECT  b.no,
+				title,
+				content,
+				name,
+				hit,
+				TO_CHAR(reg_date,'YY-MM-DD') reg_date,
+				user_no
+		FROM board b, users u
+		WHERE b.user_no = u.no
+		AND b.no = #{no}
+		AND b.user_no = #{userNo}
+	</select>
+	
+	<!-- /************************************ 게시글 수정 ************************************/ -->
+	<update id="modify" parameterType="com.javaex.vo.ReplyboardVo">
+			update board
+			set title = #{title},
+				content = #{content}
+			where no = #{no}
+			and user_no = #{userNo}
+	</update>
+
+
+</mapper>
